@@ -100,6 +100,7 @@ public class DetailMovie extends AppCompatActivity {
                         getContentResolver().insert(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, values);
                         Toast.makeText(DetailMovie.this, getResources().getString(R.string.name), Toast.LENGTH_SHORT).show();
                         isFavorite = true;
+                        Log.d("msg", String.valueOf(values));
                     }
 
                 }
