@@ -2,6 +2,7 @@ package com.example.mysubmissionmadefour.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.mysubmissionmadefour.DetailTvShow;
 import com.example.mysubmissionmadefour.R;
+import com.example.mysubmissionmadefour.db.DatabaseContract;
 import com.example.mysubmissionmadefour.entity.TvShow;
+import com.example.mysubmissionmadefour.helper.MappingHelper;
 
 import java.util.ArrayList;
 
@@ -34,8 +37,9 @@ public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAd
     }
 
     public void setListFavTvShow(ArrayList<TvShow> listFavTvShow) {
+        Cursor cursor = context.getContentResolver().query(DatabaseContract.TvShowColumns.TVSHOW_CONTENT_URI, null, null, null, null);
         this.listFavTvShow.clear();
-        this.listFavTvShow.addAll(listFavTvShow);
+        this.listFavTvShow.addAll(MappingHelper.mapCursorToArrayListTvShow(cursor));
         notifyDataSetChanged();
     }
 

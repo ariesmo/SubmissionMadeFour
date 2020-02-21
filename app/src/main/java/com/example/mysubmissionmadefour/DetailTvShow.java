@@ -84,6 +84,7 @@ public class DetailTvShow extends AppCompatActivity {
                     if (isFavorite){
                         getContentResolver().delete(uriTvShow, null, null);
                         isFavorite = false;
+
                     } else {
                         ContentValues values = new ContentValues();
                         values.put(DatabaseContract.TvShowColumns._ID, tvShow.getId());
