@@ -29,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class FavoriteTvShow extends Fragment implements LoadTvShowCallback {
+public class FavoriteTvShow extends Fragment {
 
     private static final String EXTRA_STATE_TVSHOW = "extra_state_tvshow";
 
@@ -52,111 +52,111 @@ public class FavoriteTvShow extends Fragment implements LoadTvShowCallback {
         adapter.notifyDataSetChanged();
         rvTvShows.setAdapter(adapter);
 
-        HandlerThread thread = new HandlerThread("TvShowObserver");
-        thread.start();
-
-        Handler handler = new Handler(thread.getLooper());
-        TvShowObserver observer = new TvShowObserver(handler, getContext());
-        getActivity().getApplicationContext().getContentResolver().registerContentObserver(DatabaseContract.TvShowColumns.TVSHOW_CONTENT_URI, true, observer);
-
-
-        if (savedInstanceState == null){
-            new LoadTvShowAsync(getContext(), this).execute();
-        } else {
-            ArrayList<TvShow> list = savedInstanceState.getParcelableArrayList(EXTRA_STATE_TVSHOW);
-            if (list != null){
-                adapter.setListFavTvShow(listTvShow);
-            }
-        }
+//        HandlerThread thread = new HandlerThread("TvShowObserver");
+//        thread.start();
+//
+//        Handler handler = new Handler(thread.getLooper());
+//        TvShowObserver observer = new TvShowObserver(handler, getContext());
+//        getActivity().getApplicationContext().getContentResolver().registerContentObserver(DatabaseContract.TvShowColumns.TVSHOW_CONTENT_URI, true, observer);
+//
+//
+//        if (savedInstanceState == null){
+//            new LoadTvShowAsync(getContext(), this).execute();
+//        } else {
+//            ArrayList<TvShow> list = savedInstanceState.getParcelableArrayList(EXTRA_STATE_TVSHOW);
+//            if (list != null){
+//                adapter.setListFavTvShow(listTvShow);
+//            }
+//        }
         return view;
     }
 
-    private void showSnackbarMessage(String message){
-        Snackbar.make(rvTvShows, message, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        tvShowHelper.close();
-    }
-
-    @Override
-    public void preExecute() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-    @Override
-    public void postExecute(ArrayList<TvShow> listTvShow) {
-        progressBar.setVisibility(View.INVISIBLE);
-        if (listTvShow.size() > 0){
-            adapter.setListFavTvShow(listTvShow);
-        } else {
-            adapter.setListFavTvShow(new ArrayList<TvShow>());
-            showSnackbarMessage("Tidak ada data saat ini");
-        }
-    }
-
-    private static class LoadTvShowAsync extends AsyncTask<Void, Void, ArrayList<TvShow>> {
-        private final WeakReference<Context> weakContext;
-        private final WeakReference<LoadTvShowCallback> weakCallback;
-
-        private LoadTvShowAsync(Context context, LoadTvShowCallback callback) {
-            weakContext = new WeakReference<>(context);
-            weakCallback = new WeakReference<>(callback);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            weakCallback.get().preExecute();
-        }
-
-        @Override
-        protected ArrayList<TvShow> doInBackground(Void... voids) {
-            Context context = weakContext.get();
-            Cursor cursor = context.getContentResolver().query(DatabaseContract.TvShowColumns.TVSHOW_CONTENT_URI, null, null, null, null);
-            Log.d("cursor", String.valueOf(cursor));
-            return MappingHelper.mapCursorToArrayListTvShow(cursor);
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<TvShow> list) {
-            super.onPostExecute(list);
-            weakCallback.get().postExecute(list);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(EXTRA_STATE_TVSHOW, adapter.getListFavTvShow());
-    }
-
-    public static class TvShowObserver extends ContentObserver {
-        final Context context;
-
-        /**
-         * Creates a content observer.
-         *
-         * @param handler The handler to run {@link #onChange} on, or null if none.
-         */
-        public TvShowObserver(Handler handler, Context context) {
-            super(handler);
-            this.context = context;
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            new LoadTvShowAsync(context, (LoadTvShowCallback) context).execute();
-        }
-    }
+//    private void showSnackbarMessage(String message){
+//        Snackbar.make(rvTvShows, message, Snackbar.LENGTH_SHORT).show();
+//    }
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        tvShowHelper.close();
+//    }
+//
+//    @Override
+//    public void preExecute() {
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                progressBar.setVisibility(View.VISIBLE);
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void postExecute(ArrayList<TvShow> listTvShow) {
+//        progressBar.setVisibility(View.INVISIBLE);
+//        if (listTvShow.size() > 0){
+//            adapter.setListFavTvShow(listTvShow);
+//        } else {
+//            adapter.setListFavTvShow(new ArrayList<TvShow>());
+//            showSnackbarMessage("Tidak ada data saat ini");
+//        }
+//    }
+//
+//    private static class LoadTvShowAsync extends AsyncTask<Void, Void, ArrayList<TvShow>> {
+//        private final WeakReference<Context> weakContext;
+//        private final WeakReference<LoadTvShowCallback> weakCallback;
+//
+//        private LoadTvShowAsync(Context context, LoadTvShowCallback callback) {
+//            weakContext = new WeakReference<>(context);
+//            weakCallback = new WeakReference<>(callback);
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            weakCallback.get().preExecute();
+//        }
+//
+//        @Override
+//        protected ArrayList<TvShow> doInBackground(Void... voids) {
+//            Context context = weakContext.get();
+//            Cursor cursor = context.getContentResolver().query(DatabaseContract.TvShowColumns.TVSHOW_CONTENT_URI, null, null, null, null);
+//            Log.d("cursor", String.valueOf(cursor));
+//            return MappingHelper.mapCursorToArrayListTvShow(cursor);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(ArrayList<TvShow> list) {
+//            super.onPostExecute(list);
+//            weakCallback.get().postExecute(list);
+//        }
+//    }
+//
+//    @Override
+//    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putParcelableArrayList(EXTRA_STATE_TVSHOW, adapter.getListFavTvShow());
+//    }
+//
+//    public static class TvShowObserver extends ContentObserver {
+//        final Context context;
+//
+//        /**
+//         * Creates a content observer.
+//         *
+//         * @param handler The handler to run {@link #onChange} on, or null if none.
+//         */
+//        public TvShowObserver(Handler handler, Context context) {
+//            super(handler);
+//            this.context = context;
+//        }
+//
+//        @Override
+//        public void onChange(boolean selfChange) {
+//            super.onChange(selfChange);
+//            new LoadTvShowAsync(context, (LoadTvShowCallback) context).execute();
+//        }
+//    }
 }
 
 interface LoadTvShowCallback {

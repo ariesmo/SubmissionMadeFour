@@ -58,7 +58,7 @@ public class FavoriteMovie extends Fragment implements LoadMovieCallback{
         Handler handler = new Handler(thread.getLooper());
 
         MovieObserver observer = new MovieObserver(handler, getContext());
-        getActivity().getApplicationContext().getContentResolver().registerContentObserver(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, true, observer);
+        getActivity().getContentResolver().registerContentObserver(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, true, observer);
 
         if (savedInstanceState == null){
             new LoadMovieAsync(getContext(), this).execute();
@@ -157,6 +157,8 @@ public class FavoriteMovie extends Fragment implements LoadMovieCallback{
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
             new LoadMovieAsync(context, (LoadMovieCallback) context).execute();
+
+
         }
     }
 }

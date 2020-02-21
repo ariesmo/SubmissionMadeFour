@@ -2,6 +2,7 @@ package com.example.mysubmissionmadefour.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.mysubmissionmadefour.DetailMovie;
 import com.example.mysubmissionmadefour.R;
+import com.example.mysubmissionmadefour.db.DatabaseContract;
 import com.example.mysubmissionmadefour.entity.Movie;
+import com.example.mysubmissionmadefour.helper.MappingHelper;
 
 import java.util.ArrayList;
 
@@ -33,9 +36,12 @@ public class FavoriteMovieAdapter  extends RecyclerView.Adapter<FavoriteMovieAda
         return listFavMovie;
     }
 
+
+
     public void setListFavMovie(ArrayList<Movie> listFavMovie) {
+        Cursor cursor = context.getContentResolver().query(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, null, null, null, null);
         this.listFavMovie.clear();
-        this.listFavMovie.addAll(listFavMovie);
+        this.listFavMovie.addAll(MappingHelper.mapCursorToArrayListMovie(cursor));
         notifyDataSetChanged();
     }
 

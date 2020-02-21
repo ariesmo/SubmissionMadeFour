@@ -76,20 +76,33 @@ public class DetailMovie extends AppCompatActivity {
                     cursor.close();
                 }
             }
+
+            Log.d("IS_FAV", String.valueOf(isFavorite));
+
             if (favMovie != null){
+                Log.d("MOVIE_ID", String.valueOf(movie.getId()));
+                Log.d("FAVMOVIE_ID", String.valueOf(favMovie.getId()));
                 if (movie.getId() == favMovie.getId()){
                     isFavorite = true;
                 } else {
                     isFavorite = false;
                 }
+                Log.d("IS_FAVOR", String.valueOf(isFavorite));
             }
+
             fabMovie.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d("IS_FAVORITE", String.valueOf(isFavorite));
                     if (isFavorite){
+
                         getContentResolver().delete(uriMovie, null, null);
+                        Toast.makeText(DetailMovie.this, "Satu item berhasil dihapus", Toast.LENGTH_SHORT).show();
                         isFavorite = false;
+
+
                     } else {
+
                         ContentValues values = new ContentValues();
                         values.put(DatabaseContract.MovieColumns._ID, movie.getId());
                         values.put(DatabaseContract.MovieColumns.PHOTO, movie.getPhoto());
@@ -98,11 +111,11 @@ public class DetailMovie extends AppCompatActivity {
                         values.put(DatabaseContract.MovieColumns.DESCRIPTION, movie.getDescription());
 
                         getContentResolver().insert(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, values);
-                        Toast.makeText(DetailMovie.this, getResources().getString(R.string.name), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailMovie.this, "Satu item berhasil ditambah", Toast.LENGTH_SHORT).show();
                         isFavorite = true;
                         Log.d("msg", String.valueOf(values));
-                    }
 
+                    }
                 }
             });
         }
