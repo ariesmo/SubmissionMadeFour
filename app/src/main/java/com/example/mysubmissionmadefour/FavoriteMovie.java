@@ -52,13 +52,13 @@ public class FavoriteMovie extends Fragment implements LoadMovieCallback{
         adapter.notifyDataSetChanged();
         rvMovies.setAdapter(adapter);
 
-        HandlerThread thread = new HandlerThread("MovieObserver");
-        thread.start();
-
-        Handler handler = new Handler(thread.getLooper());
-
-        MovieObserver observer = new MovieObserver(handler, getContext());
-        getActivity().getContentResolver().registerContentObserver(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, true, observer);
+//        HandlerThread thread = new HandlerThread("MovieObserver");
+//        thread.start();
+//
+//        Handler handler = new Handler(thread.getLooper());
+//
+//        MovieObserver observer = new MovieObserver(handler, getContext());
+//        getActivity().getContentResolver().registerContentObserver(DatabaseContract.MovieColumns.MOVIE_CONTENT_URI, true, observer);
 
         if (savedInstanceState == null){
             new LoadMovieAsync(getContext(), this).execute();
@@ -140,27 +140,27 @@ public class FavoriteMovie extends Fragment implements LoadMovieCallback{
         outState.putParcelableArrayList(EXTRA_STATE_MOVIE, adapter.getListFavMovie());
     }
 
-    public static class MovieObserver extends ContentObserver {
-
-        final Context context;
-        /**
-         * Creates a content observer.
-         *  @param handler The handler to run {@link #onChange} on, or null if none.
-         * @param context
-         */
-        public MovieObserver(Handler handler, Context context) {
-            super(handler);
-            this.context = context;
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            new LoadMovieAsync(context, (LoadMovieCallback) context).execute();
-
-
-        }
-    }
+//    public static class MovieObserver extends ContentObserver {
+//
+//        final Context context;
+//        /**
+//         * Creates a content observer.
+//         *  @param handler The handler to run {@link #onChange} on, or null if none.
+//         * @param context
+//         */
+//        public MovieObserver(Handler handler, Context context) {
+//            super(handler);
+//            this.context = context;
+//        }
+//
+//        @Override
+//        public void onChange(boolean selfChange) {
+//            super.onChange(selfChange);
+//            new LoadMovieAsync(context, (LoadMovieCallback) context).execute();
+//
+//
+//        }
+//    }
 }
 
 interface LoadMovieCallback {
